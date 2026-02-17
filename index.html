@@ -344,7 +344,7 @@
             position: relative;
         }
 
-        .code-line { margin-bottom: 15px; display: block; }
+        .code-line { margin-bottom: 10px; display: block; line-height: 1.4; }
         .prompt { color: var(--success-green); margin-right: 10px; user-select: none; }
         .cursor { display: inline-block; width: 8px; height: 16px; background: var(--text-muted); animation: blink 1s infinite; vertical-align: middle; }
 
@@ -362,6 +362,7 @@
             cursor: pointer;
             font-size: 0.8rem;
             transition: all 0.2s;
+            z-index: 10;
         }
 
         .copy-btn:hover { background: rgba(255,255,255,0.2); }
@@ -560,6 +561,11 @@
                         <span class="code-line"><span class="prompt">$</span>git config --global user.name "Tu Nombre"</span>
                         <span class="code-line"><span class="prompt">$</span>git config --global user.email "tu@email.com"</span>
                         <span class="code-line"><span class="prompt">$</span>git init</span>
+                        <span class="code-line"><span class="prompt">$</span>git add .</span>
+                        <span class="code-line"><span class="prompt">$</span>git commit -m "Primer commit"</span>
+                        <span class="code-line"><span class="prompt">$</span>git branch -M main</span>
+                        <span class="code-line"><span class="prompt">$</span>git remote add origin (url de tu repo)</span>
+                        <span class="code-line"><span class="prompt">$</span>git push -u origin main</span>
                         <span class="code-line"><span class="prompt">$</span>_ <span class="cursor"></span></span>
                     </div>
                 </div>
@@ -612,6 +618,12 @@
                         <td>Para guardar una "foto" del trabajo.</td>
                     </tr>
                     <tr>
+                        <td class="cmd">git branch -M main</td>
+                        <td class="icon">🌿</td>
+                        <td>Renombrar el camino</td>
+                        <td>Para usar 'main' en vez de 'master'.</td>
+                    </tr>
+                    <tr>
                         <td class="cmd">git push</td>
                         <td class="icon">🚚</td>
                         <td>Enviar camión a la nube</td>
@@ -635,7 +647,7 @@
     <!-- SCRIPT -->
     <script>
         function copyCode() {
-            const codeText = `git config --global user.name "Tu Nombre"\ngit config --global user.email "tu@email.com"\ngit init`;
+            const codeText = `git config --global user.name "Tu Nombre"\ngit config --global user.email "tu@email.com"\ngit init\ngit add .\ngit commit -m "Primer commit"\ngit branch -M main\ngit remote add origin (url de tu repo)\ngit push -u origin main`;
             
             navigator.clipboard.writeText(codeText).then(() => {
                 const btn = document.querySelector('.copy-btn');
