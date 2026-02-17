@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Masterclass | ASIR DevOps</title>
+    
+    <!-- Fonts: Inter & Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES & THEME (GitHub Dark Mode) --- */
+        :root {
+            /* Colores Base */
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --bg-border: #30363d;
+            
+            /* Texto */
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --text-link: #58a6ff;
+
+            /* Acentos */
+            --git-orange: #F05032;
+            --git-red: #da3633;
+            --github-blue: #58a6ff;
+            --success-green: #238636;
+            --warning-yellow: #d29922;
+
+            /* UI Elements */
+            --glass-bg: rgba(13, 17, 23, 0.85);
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
+            
+            /* Fonts */
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            background: rgba(110, 118, 129, 0.4);
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-size: 85%;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .text-orange { color: var(--git-orange); }
+        .text-blue { color: var(--github-blue); }
+        .text-green { color: var(--success-green); }
+
+        /* --- NAVBAR (Sticky & Glass) --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--bg-border);
+            padding: 1rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--github-blue);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 6rem 0 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--git-orange), var(--git-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background-color: var(--git-orange);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            transition: transform 0.2s, background-color 0.2s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-cta:hover {
+            background-color: #d13e22;
+            transform: translateY(-2px);
+        }
+
+        /* --- ANIMATION SECTION (The Git Flow) --- */
+        .flow-section {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(22, 27, 34, 0.5) 100%);
+            overflow: hidden;
+        }
+
+        .flow-container {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 0;
+        }
+
+        /* Conector Line */
+        .flow-line {
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--bg-border), var(--bg-border) 10px, transparent 10px, transparent 20px);
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        .stage {
+            position: relative;
+            z-index: 2;
+            background: var(--bg-card);
+            border: 1px solid var(--bg-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 180px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stage:hover {
+            transform: translateY(-5px);
+            border-color: var(--text-muted);
+        }
+
+        .stage i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .stage h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .stage span { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+        /* The Traveling Packet Animation */
+        .traveling-packet {
+            position: absolute;
+            top: 50%;
+            left: 10%; /* Start inside Working Dir */
+            width: 12px;
+            height: 12px;
+            background-color: var(--git-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--git-orange);
+            z-index: 10;
+            transform: translateY(-50%);
+            animation: gitFlow 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes gitFlow {
+            0% { left: 10%; opacity: 0; transform: translateY(-50%) scale(0.5); }
+            10% { opacity: 1; transform: translateY(-50%) scale(1); }
+            45% { left: 50%; transform: translateY(-50%) scale(1.2); background-color: var(--success-green); box-shadow: 0 0 15px var(--success-green);} /* Staging */
+            55% { left: 50%; transform: translateY(-50%) scale(1.2); }
+            90% { opacity: 1; transform: translateY(-50%) scale(1); }
+            100% { left: 90%; opacity: 0; transform: translateY(-50%) scale(0.5); background-color: var(--github-blue); } /* Remote */
+        }
+
+        /* --- COMPARISON SECTION (Grid) --- */
+        .comparison-section {
+            padding: 4rem 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-border);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Card Chaos */
+        .card-chaos { border-top: 4px solid var(--git-red); }
+        .file-list { list-style: none; font-family: var(--font-mono); color: var(--text-muted); }
+        .file-list li { margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; }
+        .file-list li i { color: var(--text-muted); opacity: 0.5; }
+
+        /* Card Order */
+        .card-order { border-top: 4px solid var(--success-green); }
+        .timeline { position: relative; padding-left: 20px; border-left: 2px solid var(--bg-border); }
+        .commit { margin-bottom: 1.5rem; position: relative; }
+        .commit::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--bg-dark);
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+        }
+        .commit:last-child { margin-bottom: 0; }
+        .commit:first-child::before { border-color: var(--success-green); background: var(--success-green); }
+        .hash { font-family: var(--font-mono); color: var(--github-blue); font-size: 0.85rem; margin-right: 10px; }
+
+        /* --- TERMINAL SECTION --- */
+        .terminal-section {
+            padding: 4rem 0;
+            background-color: #010409;
+        }
+
+        .terminal-window {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #0d1117;
+            border: 1px solid var(--bg-border);
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #161b22;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--bg-border);
+        }
+
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-title { margin-left: 20px; font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-muted); }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: var(--font-mono);
+            color: var(--text-main);
+            position: relative;
+        }
+
+        .code-line { margin-bottom: 15px; display: block; }
+        .prompt { color: var(--success-green); margin-right: 10px; user-select: none; }
+        .cursor { display: inline-block; width: 8px; height: 16px; background: var(--text-muted); animation: blink 1s infinite; vertical-align: middle; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--bg-border);
+            color: var(--text-main);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* --- CHEAT SHEET SECTION --- */
+        .cheat-sheet-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .cheat-sheet-section h2 { margin-bottom: 2rem; font-size: 2rem; }
+
+        .cheat-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-sans);
+            text-align: left;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--bg-border);
+        }
+
+        .cheat-table th, .cheat-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--bg-border);
+        }
+
+        .cheat-table th {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .cheat-table tr:hover { background-color: rgba(22, 27, 34, 0.5); }
+        .cheat-table td.cmd { font-family: var(--font-mono); color: var(--git-orange); font-weight: 600; }
+        .cheat-table td.icon { text-align: center; font-size: 1.2rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--bg-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            
+            .flow-container { flex-direction: column; gap: 2rem; padding: 1rem 0; }
+            .flow-line { 
+                width: 2px; height: 100%; top: 0; left: 50%; right: auto; 
+                transform: translateX(-50%); 
+                background: repeating-linear-gradient(180deg, var(--bg-border), var(--bg-border) 10px, transparent 10px, transparent 20px);
+            }
+            .stage { width: 80%; }
+            
+            /* Simplificar animación en móvil: Movimiento vertical */
+            .traveling-packet {
+                top: 10%; left: 50%;
+                transform: translateX(-50%);
+                animation: gitFlowMobile 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            @keyframes gitFlowMobile {
+                0% { top: 10%; opacity: 0; transform: translateX(-50%) scale(0.5); }
+                10% { opacity: 1; transform: translateX(-50%) scale(1); }
+                50% { top: 50%; transform: translateX(-50%) scale(1.2); background-color: var(--success-green); }
+                90% { opacity: 1; transform: translateX(-50%) scale(1); }
+                100% { top: 90%; opacity: 0; transform: translateX(-50%) scale(0.5); background-color: var(--github-blue); }
+            }
+
+            .nav-links { display: none; } /* En un proyecto real, añadir hamburger menu */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">ASIR / <span class="text-orange">GIT OPS</span></a>
+            <ul class="nav-links">
+                <li><a href="#hero">Inicio</a></li>
+                <li><a href="#flow">El Flujo</a></li>
+                <li><a href="#comparison">Caos vs Orden</a></li>
+                <li><a href="#cheat">CheatSheet</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero container">
+        <h1>Control Total de tu <br><span class="gradient-text">Infraestructura</span></h1>
+        <p>Olvida el <code>final_v2_definitivo.conf</code>. Bienvenido a la gestión profesional de código e infraestructura.</p>
+        <a href="#terminal" class="btn-cta">Inicializar Repositorio 👇</a>
+    </section>
+
+    <!-- FLOW ANIMATION SECTION -->
+    <section id="flow" class="flow-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-main);">El Ciclo de Vida del Dato</h2>
+            
+            <div class="flow-container">
+                <!-- Linea conectora de fondo -->
+                <div class="flow-line"></div>
+                <!-- Paquete Animado -->
+                <div class="traveling-packet"></div>
+
+                <!-- Step 1 -->
+                <div class="stage">
+                    <i class="fa-regular fa-folder-open text-orange"></i>
+                    <h3>Working Dir</h3>
+                    <span>Tu PC Local</span>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="stage">
+                    <i class="fa-solid fa-box-archive text-green"></i>
+                    <h3>Staging Area</h3>
+                    <span>La Caja de Envío</span>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="stage">
+                    <i class="fa-solid fa-cloud text-blue"></i>
+                    <h3>Remote</h3>
+                    <span>GitHub / GitLab</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON SECTION -->
+    <section id="comparison" class="comparison-section container">
+        <h2 style="text-align: center;">¿Por qué Git?</h2>
+        <div class="grid-2">
+            <!-- Card Chaos -->
+            <div class="card card-chaos">
+                <div class="card-header text-muted">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--git-red);"></i>
+                    ❌ El Caos (Tradicional)
+                </div>
+                <ul class="file-list">
+                    <li><i class="fa-regular fa-file"></i> firewall.conf</li>
+                    <li><i class="fa-regular fa-file"></i> firewall_old.conf</li>
+                    <li><i class="fa-regular fa-file"></i> firewall_miercoles.bak</li>
+                    <li style="color: var(--git-red); font-weight: bold;"><i class="fa-regular fa-file" style="color: var(--git-red); opacity: 1;"></i> firewall_NO_TOCAR.conf</li>
+                </ul>
+            </div>
+
+            <!-- Card Order -->
+            <div class="card card-order">
+                <div class="card-header text-muted">
+                    <i class="fa-solid fa-code-branch" style="color: var(--success-green);"></i>
+                    ✅ El Orden (Git History)
+                </div>
+                <div class="timeline">
+                    <div class="commit">
+                        <span class="hash">7c2a11</span> Fix: Bloqueo puerto 80
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">hace 2 horas</div>
+                    </div>
+                    <div class="commit">
+                        <span class="hash">8b4d22</span> Feat: Configuración inicial
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">hace 1 día</div>
+                    </div>
+                    <div class="commit">
+                        <span class="hash">1a9f00</span> Revert: Cambios erroneos
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">hace 2 días</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TERMINAL SECTION -->
+    <section id="terminal" class="terminal-section">
+        <div class="container">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <div class="terminal-title">user@asir-workstation: ~</div>
+                </div>
+                <div class="terminal-body">
+                    <button class="copy-btn" onclick="copyCode()">
+                        <i class="fa-regular fa-copy"></i> Copiar
+                    </button>
+                    
+                    <div class="code-content" id="git-config">
+                        <span class="code-line"><span class="prompt">$</span>git config --global user.name "Tu Nombre"</span>
+                        <span class="code-line"><span class="prompt">$</span>git config --global user.email "tu@email.com"</span>
+                        <span class="code-line"><span class="prompt">$</span>git init</span>
+                        <span class="code-line"><span class="prompt">$</span>_ <span class="cursor"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHEAT SHEET SECTION -->
+    <section id="cheat" class="cheat-sheet-section container">
+        <h2>La <span class="text-orange">Chuleta</span> del SysAdmin</h2>
+        <div style="overflow-x: auto;">
+            <table class="cheat-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th style="text-align: center;">Icono</th>
+                        <th>La Metáfora</th>
+                        <th>Cuándo usarlo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="cmd">git init</td>
+                        <td class="icon">📦</td>
+                        <td>Comprar una caja nueva</td>
+                        <td>Al empezar un proyecto nuevo.</td>
+                    </tr>
+                    <tr>
+                        <td class="cmd">git status</td>
+                        <td class="icon">👀</td>
+                        <td>Mirar qué hay en la mesa</td>
+                        <td>Siempre. Antes de hacer nada.</td>
+                    </tr>
+                    <tr>
+                        <td class="cmd">git add .</td>
+                        <td class="icon">📥</td>
+                        <td>Meter archivos en la caja</td>
+                        <td>Cuando terminas de editar un archivo.</td>
+                    </tr>
+                    <tr>
+                        <td class="cmd">git commit -m ""</td>
+                        <td class="icon">🏷️</td>
+                        <td>Precintar y etiquetar la caja</td>
+                        <td>Para guardar una "foto" del trabajo.</td>
+                    </tr>
+                    <tr>
+                        <td class="cmd">git push</td>
+                        <td class="icon">🚚</td>
+                        <td>Enviar camión a la nube</td>
+                        <td>Para subir cambios a GitHub.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ASIR DevOps Training. Diseñado para SysAdmins & Future DevOps.</p>
+            <div style="margin-top: 10px;">
+                <i class="fa-brands fa-github" style="font-size: 1.5rem; color: var(--text-main);"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        function copyCode() {
+            const codeText = `git config --global user.name "Tu Nombre"\ngit config --global user.email "tu@email.com"\ngit init`;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalHtml = btn.innerHTML;
+                
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
+                btn.style.borderColor = 'var(--success-green)';
+                btn.style.color = 'var(--success-green)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.style.borderColor = 'var(--bg-border)';
+                    btn.style.color = 'var(--text-main)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
